@@ -14,16 +14,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [NSDictionary]?
+    var endpoint: String! = "top_rated"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.dataSource = self
         tableView.delegate = self
-        
+       
         let apikey = "9d3c8941bb5a7d5abef3326b3cd2cab8"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apikey)")
+        let stringURL = "https://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(apikey)"
+        let url = URL(string: stringURL)
         let request = URLRequest(url: url!)
+        
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: {(data, response, error) in
@@ -53,10 +56,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let title = movie["title"] as? String
         let overview = movie["overview"] as? String
         let baseURL = "https://image.tmdb.org/t/p/w500/"
-        let posterPath = movie["poster_path"] as? String
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
+        let posterPath = movie["poster_path"] as? String
+
         if let posterPath = posterPath {
             let imageURL = URL(string: baseURL + posterPath)
               cell.posterView.setImageWith(imageURL!)
@@ -78,14 +82,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)
+        let movie = movies![(indexPath?.row)!]
+        
+        let movieDetailViewController = segue.destination as! MovieDetailsViewController
+        movieDetailViewController.movie = movie
+        
+        print("prepare(for seqgue:...)")
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+
     }
-    */
+    
 
 }
