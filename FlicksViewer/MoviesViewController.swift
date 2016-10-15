@@ -14,8 +14,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var mainView: UIView!
-//    @IBOutlet weak var errorView: UIView!
-    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var moviesSearchBar: UISearchBar!
     
     var movies: [NSDictionary]?
     var endpoint: String! = "top_rated"
@@ -26,6 +25,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
+        moviesSearchBar.showsSearchResultsButton = true
+              
+        self.navigationItem.titleView = moviesSearchBar
+        
         
         self.refreshControl.addTarget(self, action: #selector(MoviesViewController.refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         //        refreshControl.addTarget(self, action: "refresh", for: UIControlEvents.valueChanged)
