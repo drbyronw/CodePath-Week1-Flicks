@@ -13,6 +13,9 @@ import MBProgressHUD
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var mainView: UIView!
+//    @IBOutlet weak var errorView: UIView!
+    @IBOutlet weak var errorLabel: UILabel!
     
     var movies: [NSDictionary]?
     var endpoint: String! = "top_rated"
@@ -24,13 +27,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         
-        
         self.refreshControl.addTarget(self, action: #selector(MoviesViewController.refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         //        refreshControl.addTarget(self, action: "refresh", for: UIControlEvents.valueChanged)
         
         tableView.insertSubview(refreshControl, at: 0)
         
         performDataRequest()
+        
         // Do any additional setup after loading the view.
     }
     
@@ -97,12 +100,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             if let responseData = data {
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: responseData, options: []) as? NSDictionary
                 {
-                    //                    print("response: \(responseDictionary)")
+
                     self.movies = responseDictionary["results"] as? [NSDictionary]
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.tableView.reloadData()
                     
                 }
+            } else {
+                self.tableView.reloadData()
+                MBProgressHUD.hide(for: self.view, animated: true)
+                print("ERRROORRROOROROORORORRRRRR__________\n\n\(error)\n\n________")
             }
         })
         task.resume()
