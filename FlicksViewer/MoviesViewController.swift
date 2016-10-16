@@ -14,6 +14,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var mainView: UIView!
+    
+    var errorView = UIView()
+    var errorLabel = UILabel()
 
     let searchController = UISearchController(searchResultsController: nil)
     var filteredMovies = [NSDictionary]()
@@ -35,11 +38,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.sizeToFit()
         
-        
         self.refreshControl.addTarget(self, action: #selector(MoviesViewController.refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         //        refreshControl.addTarget(self, action: "refresh", for: UIControlEvents.valueChanged)
         
-        tableView.insertSubview(refreshControl, at: 0)
+        errorView.frame = CGRect(x: 0, y: 20, width: 320, height: 30)
+        errorLabel.frame = CGRect(x: 10, y: 3, width: 320, height: 30)
+//        errorView.backgroundColor = UIColor(red: 144, green: 195, blue: 219, alpha: 1)
+        errorView.backgroundColor = UIColor.green
+        errorLabel.text = "Networking Error, Please Try Later"
+        errorLabel.font = errorLabel.font.withSize(14)
+        errorLabel.sizeToFit()
+        errorLabel.center = CGPoint(x: errorView.frame.width/2, y: errorView.frame.height/2)
+        errorView.insertSubview(errorLabel, at: 0)
+        
+        errorView.isHidden = true
+        UIApplication.shared.keyWindow?.addSubview(errorView)
+
+        tableView.insertSubview(refreshControl, at: 1)
         
         performDataRequest()
         
@@ -80,6 +95,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let baseURL = "https://image.tmdb.org/t/p/w500/"
         cell.titleLabel?.text = title
         cell.overviewLabel?.text = overview
+        cell.overviewLabel.sizeToFit()
         
         let posterPath = movie["poster_path"] as? String
         
@@ -138,6 +154,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             } else {
                 self.tableView.reloadData()
                 MBProgressHUD.hide(for: self.view, animated: true)
+                self.errorView.isHidden = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6), execute: {
+                    // Put your code which should be executed with a delay here
+                    self.errorView.isHidden = true
+                })
                 print("ERRROORRROOROROORORORRRRRR__________\n\n\(error)\n\n________")
             }
         })
