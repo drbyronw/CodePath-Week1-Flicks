@@ -15,7 +15,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var mainView: UIView!
 
-    
     let searchController = UISearchController(searchResultsController: nil)
     var filteredMovies = [NSDictionary]()
     
