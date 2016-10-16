@@ -14,6 +14,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var mainView: UIView!
+    
+    var errorView = UIView()
+    var errorLabel = UILabel()
 
     let searchController = UISearchController(searchResultsController: nil)
     var filteredMovies = [NSDictionary]()
@@ -35,11 +38,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.sizeToFit()
         
-        
         self.refreshControl.addTarget(self, action: #selector(MoviesViewController.refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         //        refreshControl.addTarget(self, action: "refresh", for: UIControlEvents.valueChanged)
         
-        tableView.insertSubview(refreshControl, at: 0)
+        errorView.frame = CGRect(x: 0, y: 33, width: 320, height: 30)
+        tableView.insertSubview(refreshControl, at: 1)
         
         performDataRequest()
         
