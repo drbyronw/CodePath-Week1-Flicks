@@ -138,7 +138,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let url = URL(string: stringURL)
         let request = URLRequest(url: url!)
         
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 10
+        
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: OperationQueue.main)
+    
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: {(data, response, error) in
