@@ -96,7 +96,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.titleLabel?.text = title
         cell.overviewLabel?.text = overview
         cell.overviewLabel.sizeToFit()
-        
+//        cell.selectionStyle = .none
+        let backgroundView = UIView()
+        let specialBlue = UIColor(red: 144/255, green: 195/255, blue: 219/255, alpha: 1)
+
+        backgroundView.backgroundColor = specialBlue
+        cell.selectedBackgroundView = backgroundView
         let posterPath = movie["poster_path"] as? String
         
         if let posterPath = posterPath {
