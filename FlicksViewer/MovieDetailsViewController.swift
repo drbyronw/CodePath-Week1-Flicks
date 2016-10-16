@@ -37,7 +37,7 @@ class MovieDetailsViewController: UIViewController {
             
         }
         
-        print(movie)
+        //print(movie)
         // Do any additional setup after loading the view.
     }
     

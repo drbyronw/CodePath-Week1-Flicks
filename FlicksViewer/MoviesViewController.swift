@@ -14,7 +14,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var mainView: UIView!
-    @IBOutlet weak var moviesSearchBar: UISearchBar!
+    
+    let searchController = UISearchController(searchResultsController: nil)
+    var filteredMovies = [NSDictionary]()
     
     var movies: [NSDictionary]?
     var endpoint: String! = "top_rated"
@@ -25,9 +27,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
-        moviesSearchBar.showsSearchResultsButton = true
-              
-        self.navigationItem.titleView = moviesSearchBar
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.sizeToFit()
         
         
         self.refreshControl.addTarget(self, action: #selector(MoviesViewController.refreshControlAction(_:)), for: UIControlEvents.valueChanged)
@@ -45,10 +51,30 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Dispose of any resources that can be recreated.
     }
     
+    func filteredSearchContent(_ searchText: String) {
+        var temp: String = ""
+        filteredMovies = movies!.filter { movie in
+            temp = (movie["title"] as? String)!
+            if temp.lowercased().contains(searchText.lowercased()) {
+                print(temp)
+                return true
+            } else {
+                return false
+            }
+        }
+        tableView.reloadData()
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-        let movie = movies![indexPath.row]
+        var movie = NSDictionary()
+        if searchController.isActive && searchController.searchBar.text != "" {
+            movie = filteredMovies[indexPath.row]
+        } else {
+            movie = movies![indexPath.row]
+        }
+
         let title = movie["title"] as? String
         let overview = movie["overview"] as? String
         let baseURL = "https://image.tmdb.org/t/p/w500/"
@@ -103,7 +129,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             if let responseData = data {
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: responseData, options: []) as? NSDictionary
                 {
-
+                    
                     self.movies = responseDictionary["results"] as? [NSDictionary]
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.tableView.reloadData()
@@ -121,7 +147,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let movies = movies {
-            return movies.count
+            if searchController.isActive && searchController.searchBar.text != "" {
+                return filteredMovies.count
+            } else {
+                return movies.count
+            }
         } else {
             return 0
         }
@@ -144,15 +174,26 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)
-        let movie = movies![(indexPath?.row)!]
-        
+        var movie = NSDictionary()
+        print("Index Path for Segue: \(indexPath?.row)")
+        if searchController.isActive && searchController.searchBar.text != "" {
+            movie = filteredMovies[(indexPath?.row)!]
+        } else {
+            movie = movies![(indexPath?.row)!]
+        }
         let movieDetailViewController = segue.destination as! MovieDetailsViewController
         movieDetailViewController.movie = movie
         
-        print("prepare(for segue:...)")
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
+    }
+}
+
+extension MoviesViewController: UISearchResultsUpdating {
+    @available(iOS 8.0, *)
+    public func updateSearchResults(for searchController: UISearchController) {
+        filteredSearchContent(searchController.searchBar.text!)
     }
     
     
