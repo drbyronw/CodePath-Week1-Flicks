@@ -40,6 +40,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
+/# of hours spent = 12
+
 Describe any challenges encountered while building the app.
 * issue with how long it takes for network datatask request to timeout - wait for error message 30+ seconds 
 
