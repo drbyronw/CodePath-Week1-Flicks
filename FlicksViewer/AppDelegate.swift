@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = UITabBarController()
 //        tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
         tabBarController.setViewControllers([nowPlayingNavigationController, topRatedNavigationController], animated: true)
+//        tabBarController.tabBar.barTintColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+        tabBarController.tabBar.barTintColor = UIColor.black
         
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()

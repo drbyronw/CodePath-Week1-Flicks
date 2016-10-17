@@ -56,6 +56,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         tableView.insertSubview(refreshControl, at: 1)
         
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.tintColor = UIColor(red: 144/255, green: 195/255, blue: 219/255, alpha: 0.85)
+            
+            let shadow = NSShadow()
+            shadow.shadowColor = UIColor.gray.withAlphaComponent(0.5)
+//            shadow.shadowOffset = CGSizeMake(2, 2);
+            shadow.shadowBlurRadius = 4;
+//            navigationBar.titleTextAttributes = [
+//                NSFontAttributeName : UIFont.boldSystemFont(ofSize: 22),
+//                NSForegroundColorAttributeName : UIColor(red: 0.5, green: 0.15, blue: 0.15, alpha: 0.8),
+//                NSShadowAttributeName : shadow
+//            ]
+        }
+        
         performDataRequest()
         
         // Do any additional setup after loading the view.
@@ -98,10 +112,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.overviewLabel.sizeToFit()
 //        cell.selectionStyle = .none
         let backgroundView = UIView()
-        let specialBlue = UIColor(red: 144/255, green: 195/255, blue: 219/255, alpha: 1)
+        let specialBlue = UIColor(red: 144/255, green: 195/255, blue: 219/255, alpha: 0.85)
 
         backgroundView.backgroundColor = specialBlue
         cell.selectedBackgroundView = backgroundView
+        cell.backgroundColor = UIColor(red: 211/255, green: 236/255, blue: 245/255, alpha: 0.9)
         let posterPath = movie["poster_path"] as? String
         
         if let posterPath = posterPath {
