@@ -21,12 +21,12 @@ The following **optional** features are implemented:
 - [x] Add a search bar.
 - [x] All images fade in.
 - [ ] For the large poster, load the low-res image first, switch to high-res when complete.
-- [ ] Customize the highlight and selection effect of the cell.
-- [ ] Customize the navigation bar.
+- [x] Customize the highlight and selection effect of the cell.
+- [x] Customize the navigation bar.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] Changed the request timeout to 10 seconds instead of the default - 60 
 
 ## Video Walkthrough
 
