@@ -1,4 +1,4 @@
-# Project 1 - Flicks - Week 1
+# Flicks Movie App
 
 Flicks is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
