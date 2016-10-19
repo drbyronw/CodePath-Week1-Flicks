@@ -2,8 +2,6 @@
 
 Flicks is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **X** hours spent in total
-
 ## User Stories
 
 The following **required** functionality is completed:
